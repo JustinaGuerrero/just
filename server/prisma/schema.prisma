@@ -1,0 +1,132 @@
+// Esquema de datos de JUST.
+// Docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------- Enums ----------
+
+enum Category {
+  TEE // Remeras
+  SHIRT // Camisas
+  PANTS // Pantalones y jeans
+  SKIRT // Faldas
+  DRESS // Vestidos
+  OUTERWEAR // Camperas y abrigos
+  SHOES // Calzado
+  ACCESSORY // Accesorios
+}
+
+enum Season {
+  SPRING
+  SUMMER
+  AUTUMN
+  WINTER
+}
+
+enum Style {
+  CASUAL
+  FORMAL
+  SPORT
+  ELEGANT
+  STREET
+}
+
+enum Occasion {
+  UNIVERSITY // Facultad
+  WORK // Trabajo
+  OUTING // Salidas
+  EVENT // Eventos
+  SPORT // Deporte
+  OTHER
+}
+
+// ---------- Modelos ----------
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime @default(now())
+
+  garments Garment[]
+  outfits  Outfit[]
+  planned  PlannedOutfit[]
+}
+
+// Una prenda del armario de un usuario.
+model Garment {
+  id            String     @id @default(cuid())
+  userId        String
+  name          String
+  category      Category
+  colors        String[]
+  styles        Style[]
+  seasons       Season[]
+  brand         String?
+  imageUrl      String
+  imagePublicId String? // id de la imagen en Cloudinary, para poder borrarla
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  user  User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items OutfitItem[]
+
+  @@index([userId, category])
+}
+
+// Un look armado con varias prendas.
+model Outfit {
+  id         String    @id @default(cuid())
+  userId     String
+  name       String
+  occasion   Occasion  @default(OTHER)
+  isFavorite Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  user    User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items   OutfitItem[]
+  planned PlannedOutfit[]
+
+  @@index([userId, isFavorite])
+}
+
+// Relación muchos a muchos entre looks y prendas,
+// con la posición de la prenda dentro del lienzo.
+model OutfitItem {
+  id        String @id @default(cuid())
+  outfitId  String
+  garmentId String
+  x         Float  @default(0)
+  y         Float  @default(0)
+  scale     Float  @default(1)
+  zIndex    Int    @default(0)
+
+  outfit  Outfit  @relation(fields: [outfitId], references: [id], onDelete: Cascade)
+  garment Garment @relation(fields: [garmentId], references: [id], onDelete: Cascade)
+
+  @@unique([outfitId, garmentId])
+}
+
+// Un look planificado para un día del calendario (uno por día y usuario).
+model PlannedOutfit {
+  id       String    @id @default(cuid())
+  userId   String
+  outfitId String
+  date     DateTime  @db.Date
+  occasion Occasion?
+  notes    String?
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  outfit Outfit @relation(fields: [outfitId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+}
