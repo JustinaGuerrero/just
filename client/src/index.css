@@ -1,1 +1,34 @@
 @import "tailwindcss";
+
+/* Sistema de diseño de JUST: tokens disponibles como clases de Tailwind.
+   Ej: bg-linen, text-ink, border-sand, font-serif, rounded-card */
+@theme {
+  --color-linen: #f3efe8; /* fondo de secciones */
+  --color-paper: #fbf9f5; /* superficie principal */
+  --color-ink: #1f1c19; /* texto y acciones */
+  --color-ash: #6e665e; /* texto secundario */
+  --color-sand: #e2dcd3; /* bordes */
+  --color-blush: #d9b8ac; /* acento */
+  --color-blush-soft: #efe2dd; /* fondo de acento */
+  --color-blush-deep: #8c5a4b; /* texto de acento */
+
+  --font-sans: "Jost", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
+
+  --radius-field: 0.875rem; /* campos */
+  --radius-card: 1.125rem; /* tarjetas */
+  --radius-panel: 1.75rem; /* contenedores */
+
+  --tracking-label: 0.22em;
+  --tracking-brand: 0.42em;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+  }
+}
