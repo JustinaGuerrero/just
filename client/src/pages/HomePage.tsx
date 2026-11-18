@@ -1,32 +1,31 @@
-import { useCurrentUser, useLogout } from '../features/auth/auth';
+import { Link } from 'react-router-dom';
+import { useCurrentUser } from '../features/auth/auth';
+import { useGarmentCounts } from '../features/garments/garments';
 
 export default function HomePage() {
   const { data: user } = useCurrentUser();
-  const logout = useLogout();
+  const { data: counts } = useGarmentCounts();
+  const total = counts?.total;
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-3xl flex-col px-6 py-8">
-      <header className="flex items-center justify-between">
-        <p className="text-xl font-light tracking-brand">JUST</p>
-        <button
-          type="button"
-          onClick={() => logout.mutate()}
-          disabled={logout.isPending}
-          className="h-11 rounded-full border border-ink px-5 text-sm font-medium transition hover:bg-linen focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:opacity-60"
-        >
-          Cerrar sesión
-        </button>
-      </header>
-
-      <section className="my-auto py-16">
-        <p className="text-xs uppercase tracking-label text-ash">Inicio</p>
-        <h1 className="mt-2 font-serif text-5xl font-normal leading-tight">
-          Hola, <span className="italic">{user?.name}</span>
-        </h1>
-        <p className="mt-4 max-w-md text-base text-ash">
-          Tu espacio está listo. Pronto vas a poder subir tus prendas y armar tus looks.
-        </p>
-      </section>
+    <main className="mx-auto max-w-6xl px-6 py-16">
+      <p className="text-xs uppercase tracking-label text-ash">Inicio</p>
+      <h1 className="mt-2 font-serif text-5xl font-normal leading-tight">
+        Hola, <span className="italic">{user?.name}</span>
+      </h1>
+      <p className="mt-4 max-w-md text-base text-ash">
+        {total === undefined
+          ? 'Tu espacio está listo.'
+          : total === 0
+            ? 'Tu armario está vacío todavía. Subí tu primera prenda para empezar.'
+            : `Tenés ${total} ${total === 1 ? 'prenda' : 'prendas'} en tu armario.`}
+      </p>
+      <Link
+        to="/wardrobe"
+        className="mt-8 inline-flex h-12 items-center rounded-full bg-ink px-6 text-sm font-medium text-paper transition hover:bg-ink/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+      >
+        Ir a Mi armario
+      </Link>
     </main>
   );
 }
