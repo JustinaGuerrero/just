@@ -11,39 +11,14 @@ import { addDays, formatLongDate, formatMonthYear, formatWeekdayShort, parseISOD
 import {
   clothingTip,
   describeWeather,
+  loadPlace,
+  savePlace,
   searchPlaces,
   seasonFor,
   useForecast,
   type Place,
   type WeatherKind,
 } from '../lib/weather';
-
-const DEFAULT_PLACE: Place = { name: 'Buenos Aires, Argentina', latitude: -34.6037, longitude: -58.3816 };
-const PLACE_STORAGE_KEY = 'just:place';
-
-// La ciudad elegida se recuerda en este navegador (si no hay almacenamiento, se usa la de por defecto).
-function loadPlace(): Place {
-  try {
-    const raw = localStorage.getItem(PLACE_STORAGE_KEY);
-    if (raw) {
-      const place = JSON.parse(raw);
-      if (typeof place?.name === 'string' && typeof place?.latitude === 'number' && typeof place?.longitude === 'number') {
-        return place;
-      }
-    }
-  } catch {
-    /* sin almacenamiento disponible */
-  }
-  return DEFAULT_PLACE;
-}
-
-function savePlace(place: Place) {
-  try {
-    localStorage.setItem(PLACE_STORAGE_KEY, JSON.stringify(place));
-  } catch {
-    /* sin almacenamiento disponible */
-  }
-}
 
 function WeatherIcon({ kind }: { kind: WeatherKind }) {
   const props = {

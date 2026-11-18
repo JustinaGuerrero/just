@@ -15,6 +15,33 @@ export type DayForecast = {
 
 export type WeatherKind = 'sun' | 'cloud' | 'rain' | 'snow' | 'fog';
 
+export const DEFAULT_PLACE: Place = { name: 'Buenos Aires, Argentina', latitude: -34.6037, longitude: -58.3816 };
+const PLACE_STORAGE_KEY = 'just:place';
+
+// La ciudad elegida se recuerda en este navegador (si no hay almacenamiento, se usa la de por defecto).
+export function loadPlace(): Place {
+  try {
+    const raw = localStorage.getItem(PLACE_STORAGE_KEY);
+    if (raw) {
+      const place = JSON.parse(raw);
+      if (typeof place?.name === 'string' && typeof place?.latitude === 'number' && typeof place?.longitude === 'number') {
+        return place;
+      }
+    }
+  } catch {
+    /* sin almacenamiento disponible */
+  }
+  return DEFAULT_PLACE;
+}
+
+export function savePlace(place: Place) {
+  try {
+    localStorage.setItem(PLACE_STORAGE_KEY, JSON.stringify(place));
+  } catch {
+    /* sin almacenamiento disponible */
+  }
+}
+
 const FORECAST_URL = 'https://api.open-meteo.com/v1/forecast';
 const GEOCODING_URL = 'https://geocoding-api.open-meteo.com/v1/search';
 
