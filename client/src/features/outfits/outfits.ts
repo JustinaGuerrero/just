@@ -65,7 +65,11 @@ export function useSaveOutfit() {
       id
         ? api<{ outfit: Outfit }>(`/api/outfits/${id}`, { method: 'PUT', body: input })
         : api<{ outfit: Outfit }>('/api/outfits', { method: 'POST', body: input }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: OUTFITS_KEY }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: OUTFITS_KEY });
+      // Los looks planificados en el calendario muestran el look actualizado.
+      queryClient.invalidateQueries({ queryKey: ['planned'] });
+    },
   });
 }
 
@@ -82,6 +86,10 @@ export function useDeleteOutfit() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => api<void>(`/api/outfits/${id}`, { method: 'DELETE' }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: OUTFITS_KEY }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: OUTFITS_KEY });
+      // Borrar un look también lo saca del calendario.
+      queryClient.invalidateQueries({ queryKey: ['planned'] });
+    },
   });
 }

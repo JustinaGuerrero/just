@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import AppLayout from './components/AppLayout';
 import { ProtectedRoute, PublicOnlyRoute } from './components/RouteGuards';
 import BuilderPage from './pages/BuilderPage';
+import CalendarPage from './pages/CalendarPage';
 import FavoritesPage from './pages/FavoritesPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
@@ -23,6 +24,7 @@ export default function App() {
           <Route path="/outfits/new" element={<BuilderPage />} />
           <Route path="/outfits/:id" element={<BuilderPage />} />
           <Route path="/favorites" element={<FavoritesPage />} />
+          <Route path="/calendar" element={<CalendarPage />} />
         </Route>
       </Route>
 

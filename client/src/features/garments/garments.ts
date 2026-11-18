@@ -45,8 +45,9 @@ function toQuery(filters: GarmentFilters): string {
 // así una sola invalidación refresca la lista y los contadores.
 const GARMENTS_KEY = ['garments'];
 
-export function useGarments(filters: GarmentFilters) {
+export function useGarments(filters: GarmentFilters, { enabled = true }: { enabled?: boolean } = {}) {
   return useQuery({
+    enabled,
     queryKey: [...GARMENTS_KEY, 'list', filters],
     queryFn: async () => (await api<{ garments: Garment[] }>(`/api/garments${toQuery(filters)}`)).garments,
     placeholderData: keepPreviousData, // mantiene la grilla mientras llegan los resultados nuevos

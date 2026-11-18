@@ -26,6 +26,13 @@ const WardrobeIcon = () => (
   </svg>
 );
 
+const CalendarIcon = () => (
+  <svg {...iconProps}>
+    <rect x="4" y="5" width="16" height="15" rx="2" />
+    <path d="M4 10h16M9 3v4M15 3v4" />
+  </svg>
+);
+
 const PlusIcon = () => (
   <svg {...iconProps}>
     <path d="M12 5v14M5 12h14" />
@@ -40,12 +47,12 @@ const HeartIcon = () => (
 
 type NavItem = { to: string; label: string; icon: ReactNode };
 
-// Calendario se suma cuando exista su pantalla.
 const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'Inicio', icon: <HomeIcon /> },
   { to: '/wardrobe', label: 'Armario', icon: <WardrobeIcon /> },
   { to: '/outfits/new', label: 'Crear', icon: <PlusIcon /> },
   { to: '/favorites', label: 'Favoritos', icon: <HeartIcon /> },
+  { to: '/calendar', label: 'Calendario', icon: <CalendarIcon /> },
 ];
 
 export default function AppLayout() {
