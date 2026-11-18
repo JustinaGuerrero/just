@@ -164,7 +164,7 @@ garmentsRouter.patch('/:id', upload.single('image'), async (req, res) => {
   }
 
   const existing = await prisma.garment.findFirst({
-    where: { id: req.params.id, userId: res.locals.userId },
+    where: { id: String(req.params.id), userId: res.locals.userId },
   });
   if (!existing) {
     return res.status(404).json({ error: 'No encontramos esa prenda' });

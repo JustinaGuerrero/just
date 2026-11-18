@@ -119,9 +119,16 @@ Todas las rutas, salvo las de autenticación, requieren sesión.
 - Las fechas del calendario viajan como `YYYY-MM-DD` y se guardan sin hora, para evitar corrimientos por zona horaria.
 - El clima se consulta desde el navegador y se cachea 30 minutos, así que el servidor no depende de ningún servicio externo para eso.
 
-## Próximos pasos
+## Tests
 
-- Más tests, en especial del backend y de los flujos completos.
+```bash
+cd server && npm test    # API: autenticación, prendas, looks y calendario
+cd client && npm test    # fechas, clima y colores
+```
+
+- **Backend:** prueban cada ruta de la API (validaciones, sesión, permisos entre usuarios, subida y reemplazo de fotos), con la base de datos y Cloudinary simulados, así que corren en segundos y sin cuentas externas.
+- **Frontend:** prueban la lógica de fechas, clima y colores.
+- Todo corre automáticamente en cada push con GitHub Actions, junto con el lint, el build y el chequeo de tipos.
 
 ---
 
