@@ -5,8 +5,12 @@ import {
   CATEGORIES,
   COLORS,
   SEASONS,
+  MAX_CUSTOM_NAME,
   STYLES,
   capitalize,
+  isCustomColor,
+  makeCustomColor,
+  parseColor,
   type Category,
   type Season,
   type Style,
@@ -14,6 +18,7 @@ import {
 import { useCreateGarment, useDeleteGarment, useUpdateGarment, type Garment } from './garments';
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const MAX_COLORS = 6;
 
 function toggle<T>(list: T[], item: T): T[] {
   return list.includes(item) ? list.filter((x) => x !== item) : [...list, item];
@@ -38,6 +43,9 @@ export function GarmentDialog({ garment, onClose }: GarmentDialogProps) {
   const [preview, setPreview] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [addingColor, setAddingColor] = useState(false);
+  const [customHex, setCustomHex] = useState('#c9a0a0');
+  const [customName, setCustomName] = useState('');
 
   const create = useCreateGarment();
   const update = useUpdateGarment();
@@ -59,6 +67,13 @@ export function GarmentDialog({ garment, onClose }: GarmentDialogProps) {
   }, []);
 
   const close = () => dialogRef.current?.close();
+
+  function addCustomColor() {
+    const value = makeCustomColor(customName, customHex);
+    if (!colors.includes(value) && colors.length < MAX_COLORS) setColors([...colors, value]);
+    setAddingColor(false);
+    setCustomName('');
+  }
 
   function handleFile(event: ChangeEvent<HTMLInputElement>) {
     const selected = event.target.files?.[0];
@@ -190,8 +205,76 @@ export function GarmentDialog({ garment, onClose }: GarmentDialogProps) {
                   />
                 );
               })}
+              {colors.filter(isCustomColor).map((value) => {
+                const { name, hex } = parseColor(value);
+                return (
+                  <button
+                    key={value}
+                    type="button"
+                    aria-label={`${capitalize(name)} (quitar)`}
+                    aria-pressed
+                    onClick={() => setColors(toggle(colors, value))}
+                    style={{ backgroundColor: hex }}
+                    className="size-9 rounded-full border border-sand ring-2 ring-ink ring-offset-2 ring-offset-paper transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                  />
+                );
+              })}
+              <button
+                type="button"
+                aria-label="Elegir otro color"
+                aria-expanded={addingColor}
+                disabled={colors.length >= MAX_COLORS}
+                onClick={() => setAddingColor(!addingColor)}
+                className="flex size-9 items-center justify-center rounded-full border border-dashed border-ash text-ash transition hover:border-ink hover:text-ink disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+              </button>
             </div>
-            {colors.length > 0 && <p className="text-xs text-ash">{colors.map(capitalize).join(', ')}</p>}
+            {addingColor && (
+              <div className="mt-2 flex flex-col gap-3 rounded-field bg-linen p-4">
+                <div className="flex items-center gap-3">
+                  <label htmlFor="custom-color" className="text-xs uppercase tracking-label text-ash">
+                    Elegí tu color
+                  </label>
+                  <input
+                    id="custom-color"
+                    type="color"
+                    value={customHex}
+                    onChange={(e) => setCustomHex(e.target.value)}
+                    className="h-11 w-16 cursor-pointer rounded-field border border-sand bg-paper p-1"
+                  />
+                </div>
+                <TextField
+                  label="Nombre del color"
+                  placeholder="Ej: verde agua"
+                  maxLength={MAX_CUSTOM_NAME}
+                  value={customName}
+                  onChange={(e) => setCustomName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault(); // no enviar el formulario de la prenda
+                      addCustomColor();
+                    }
+                  }}
+                />
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={addCustomColor}
+                    className="h-11 rounded-full bg-ink px-5 text-sm font-medium text-paper transition hover:bg-ink/90"
+                  >
+                    Agregar color
+                  </button>
+                  <button type="button" onClick={() => setAddingColor(false)} className="h-11 rounded-full px-4 text-sm text-ash hover:text-ink">
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            )}
+            {colors.length > 0 && <p className="text-xs text-ash">{colors.map((c) => capitalize(parseColor(c).name)).join(', ')}</p>}
+            {colors.length >= MAX_COLORS && <p className="text-xs text-ash">Máximo {MAX_COLORS} colores por prenda.</p>}
           </fieldset>
 
           <fieldset className="flex flex-col gap-2">

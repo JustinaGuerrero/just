@@ -54,6 +54,35 @@ export const COLORS = [
   { name: 'plateado', hex: '#C4C6C9' },
 ] as const;
 
+// Colores propios: se guardan como "nombre|#rrggbb" (en minúscula) dentro de la misma lista de colores.
+// Los de la paleta se guardan solo por nombre.
+const CUSTOM_SEPARATOR = '|';
+export const MAX_CUSTOM_NAME = 20;
+
+export function makeCustomColor(name: string, hex: string): string {
+  const clean = name
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N} -]/gu, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, MAX_CUSTOM_NAME);
+  return `${clean || 'personalizado'}${CUSTOM_SEPARATOR}${hex.toLowerCase()}`;
+}
+
+export function isCustomColor(value: string): boolean {
+  return value.includes(CUSTOM_SEPARATOR);
+}
+
+// Devuelve el nombre y el color (hex) para mostrar, sea de la paleta o propio.
+export function parseColor(value: string): { name: string; hex: string } {
+  if (isCustomColor(value)) {
+    const [name = '', hex = ''] = value.split(CUSTOM_SEPARATOR);
+    return { name: name || 'personalizado', hex: /^#[0-9a-f]{6}$/i.test(hex) ? hex : '#cccccc' };
+  }
+  const known = COLORS.find((c) => c.name === value);
+  return { name: value, hex: known?.hex ?? '#cccccc' };
+}
+
 export const OCCASIONS = [
   { value: 'UNIVERSITY', label: 'Facultad' },
   { value: 'WORK', label: 'Trabajo' },

@@ -3,7 +3,7 @@ import { Chip } from '../components/Chip';
 import { GarmentCard } from '../features/garments/GarmentCard';
 import { GarmentDialog } from '../features/garments/GarmentDialog';
 import { useGarmentCounts, useGarments, type Garment } from '../features/garments/garments';
-import { CATEGORIES, COLORS, SEASONS, STYLES, capitalize, type Category, type Season, type Style } from '../lib/catalog';
+import { CATEGORIES, COLORS, SEASONS, STYLES, capitalize, isCustomColor, parseColor, type Category, type Season, type Style } from '../lib/catalog';
 import { useDebouncedValue } from '../lib/useDebouncedValue';
 
 type DialogState = { garment: Garment | null } | null;
@@ -23,6 +23,9 @@ export default function WardrobePage() {
   const countsQuery = useGarmentCounts();
 
   const garments = garmentsQuery.data ?? [];
+  // Colores propios que ya usaste en alguna prenda, para poder filtrar por ellos.
+  const allGarments = useGarments({}).data ?? [];
+  const customColors = [...new Set(allGarments.flatMap((g) => g.colors.filter(isCustomColor)))];
   const counts = countsQuery.data?.counts ?? {};
   const total = countsQuery.data?.total ?? 0;
 
@@ -134,6 +137,22 @@ export default function WardrobePage() {
                   }`}
                 />
               ))}
+              {customColors.map((value) => {
+                const { name, hex } = parseColor(value);
+                return (
+                  <button
+                    key={value}
+                    type="button"
+                    aria-label={capitalize(name)}
+                    aria-pressed={color === value}
+                    onClick={() => setColor(color === value ? undefined : value)}
+                    style={{ backgroundColor: hex }}
+                    className={`size-9 rounded-full border border-sand transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${
+                      color === value ? 'ring-2 ring-ink ring-offset-2 ring-offset-linen' : ''
+                    }`}
+                  />
+                );
+              })}
             </div>
           </fieldset>
         </section>

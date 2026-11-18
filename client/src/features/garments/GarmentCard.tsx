@@ -1,4 +1,4 @@
-import { CATEGORY_LABEL, capitalize } from '../../lib/catalog';
+import { CATEGORY_LABEL, capitalize, parseColor } from '../../lib/catalog';
 import type { Garment } from './garments';
 
 type GarmentCardProps = {
@@ -8,7 +8,9 @@ type GarmentCardProps = {
 
 export function GarmentCard({ garment, onOpen }: GarmentCardProps) {
   const color = garment.colors[0];
-  const meta = color ? `${CATEGORY_LABEL[garment.category]} · ${capitalize(color)}` : CATEGORY_LABEL[garment.category];
+  const meta = color
+    ? `${CATEGORY_LABEL[garment.category]} · ${capitalize(parseColor(color).name)}`
+    : CATEGORY_LABEL[garment.category];
 
   return (
     <button

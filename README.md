@@ -2,6 +2,12 @@
 
 **Your wardrobe. Your rules.**
 
+[![CI](https://github.com/JustinaGuerrero/just/actions/workflows/ci.yml/badge.svg)](https://github.com/JustinaGuerrero/just/actions/workflows/ci.yml)
+
+**Probala online: [just-plum.vercel.app](https://just-plum.vercel.app)**
+
+> El backend está en un plan gratuito que se duerme tras un rato sin uso, así que la primera carga puede tardar alrededor de un minuto.
+
 JUST es un armario digital full stack: subís las fotos de tu ropa, armás looks sobre un lienzo visual y los planificás en un calendario que tiene en cuenta el clima.
 
 Es un proyecto personal que desarrollé de cero, de la base de datos a la interfaz, para practicar y mostrar el desarrollo de una aplicación web completa.
@@ -40,6 +46,11 @@ Es un proyecto personal que desarrollé de cero, de la base de datos a la interf
 - Validación con Zod
 - Autenticación con bcrypt y JWT en cookie `httpOnly`
 - Subida de imágenes con Multer y Cloudinary
+
+**Infraestructura**
+- Frontend en [Vercel](https://vercel.com), que también reenvía `/api` al backend para que la cookie de sesión sea de primera parte.
+- Backend en [Render](https://render.com) y base de datos PostgreSQL en [Neon](https://neon.tech).
+- CI con GitHub Actions: lint, tests y build del frontend, y chequeo de tipos del backend.
 
 **Servicios externos**
 - [Open-Meteo](https://open-meteo.com): pronóstico y búsqueda de ciudades, sin clave de API.
@@ -110,8 +121,7 @@ Todas las rutas, salvo las de autenticación, requieren sesión.
 
 ## Próximos pasos
 
-- Tests automatizados y CI con GitHub Actions.
-- Deploy público.
+- Más tests, en especial del backend y de los flujos completos.
 - Reemplazar la foto de una prenda ya guardada.
 
 ---
