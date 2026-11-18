@@ -50,7 +50,7 @@ Es un proyecto personal que desarrollé de cero, de la base de datos a la interf
 **Infraestructura**
 - Frontend en [Vercel](https://vercel.com), que también reenvía `/api` al backend para que la cookie de sesión sea de primera parte.
 - Backend en [Render](https://render.com) y base de datos PostgreSQL en [Neon](https://neon.tech).
-- CI con GitHub Actions: lint, tests y build del frontend, y chequeo de tipos del backend.
+- CI con GitHub Actions: lint, tests y build del frontend, y chequeo de tipos y tests del backend.
 
 **Servicios externos**
 - [Open-Meteo](https://open-meteo.com): pronóstico y búsqueda de ciudades, sin clave de API.
@@ -58,7 +58,7 @@ Es un proyecto personal que desarrollé de cero, de la base de datos a la interf
 
 ## Cómo correrlo en tu computadora
 
-Necesitás Node.js 20 o superior, Docker y una cuenta gratuita de Cloudinary.
+Necesitás Node.js 22, Docker y una cuenta gratuita de Cloudinary.
 
 ```bash
 # 1. Clonar el repo
@@ -95,7 +95,9 @@ just/
 ├── server/    # Express + Prisma
 │   ├── prisma/           # esquema y migraciones
 │   └── src/
-│       ├── routes/       # auth, garments, outfits y planned
+│       ├── app.ts        # la API (rutas y manejo de errores)
+│       ├── index.ts      # enciende el servidor
+│       ├── routes/       # auth, garments, outfits y planned, con sus tests
 │       ├── middleware/   # autenticación
 │       └── lib/          # Prisma y Cloudinary
 └── docker-compose.yml    # PostgreSQL local
@@ -108,7 +110,7 @@ Todas las rutas, salvo las de autenticación, requieren sesión.
 | Recurso | Rutas |
 | --- | --- |
 | Autenticación | `POST /api/auth/register`, `POST /api/auth/login`, `POST /api/auth/logout`, `GET /api/auth/me` |
-| Prendas | `GET /api/garments`, `GET /api/garments/counts`, `POST /api/garments`, `PATCH /api/garments/:id`, `DELETE /api/garments/:id` |
+| Prendas | `GET /api/garments`, `GET /api/garments/counts`, `POST /api/garments`, `PATCH /api/garments/:id` (JSON, o formulario si se cambia la foto), `DELETE /api/garments/:id` |
 | Looks | `GET /api/outfits`, `GET /api/outfits/:id`, `POST /api/outfits`, `PUT /api/outfits/:id`, `PATCH /api/outfits/:id`, `DELETE /api/outfits/:id` |
 | Calendario | `GET /api/planned?from=&to=`, `PUT /api/planned/:fecha`, `DELETE /api/planned/:fecha` |
 
