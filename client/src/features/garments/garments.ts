@@ -91,6 +91,10 @@ export function useDeleteGarment() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => api<void>(`/api/garments/${id}`, { method: 'DELETE' }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: GARMENTS_KEY }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: GARMENTS_KEY });
+      // Borrar una prenda también la saca de los looks que la usaban.
+      queryClient.invalidateQueries({ queryKey: ['outfits'] });
+    },
   });
 }

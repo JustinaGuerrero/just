@@ -7,6 +7,7 @@ import { config } from './config.js';
 import { prisma } from './lib/prisma.js';
 import { authRouter } from './routes/auth.js';
 import { garmentsRouter } from './routes/garments.js';
+import { outfitsRouter } from './routes/outfits.js';
 
 const app = express();
 app.use(cors({ origin: config.clientOrigin, credentials: true }));
@@ -27,6 +28,7 @@ app.get('/api/health/db', async (_req, res) => {
 
 app.use('/api/auth', authRouter);
 app.use('/api/garments', garmentsRouter);
+app.use('/api/outfits', outfitsRouter);
 
 // Manejo de errores: respuestas claras en vez de pantallas de error o textos técnicos.
 app.use((error: unknown, _req: Request, res: Response, _next: NextFunction) => {

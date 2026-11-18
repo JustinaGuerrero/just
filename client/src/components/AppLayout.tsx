@@ -26,12 +26,26 @@ const WardrobeIcon = () => (
   </svg>
 );
 
+const PlusIcon = () => (
+  <svg {...iconProps}>
+    <path d="M12 5v14M5 12h14" />
+  </svg>
+);
+
+const HeartIcon = () => (
+  <svg {...iconProps}>
+    <path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z" />
+  </svg>
+);
+
 type NavItem = { to: string; label: string; icon: ReactNode };
 
-// Se irán sumando Crear, Favoritos y Calendario a medida que existan las pantallas.
+// Calendario se suma cuando exista su pantalla.
 const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'Inicio', icon: <HomeIcon /> },
   { to: '/wardrobe', label: 'Armario', icon: <WardrobeIcon /> },
+  { to: '/outfits/new', label: 'Crear', icon: <PlusIcon /> },
+  { to: '/favorites', label: 'Favoritos', icon: <HeartIcon /> },
 ];
 
 export default function AppLayout() {
@@ -83,7 +97,7 @@ export default function AppLayout() {
             to={item.to}
             end
             className={({ isActive }) =>
-              `flex min-w-20 flex-col items-center gap-1 rounded-card py-1 text-[11px] ${
+              `flex min-w-16 flex-col items-center gap-1 rounded-card py-1 text-[11px] ${
                 isActive ? 'font-medium text-ink' : 'text-ash'
               }`
             }

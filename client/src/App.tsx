@@ -1,6 +1,8 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import AppLayout from './components/AppLayout';
 import { ProtectedRoute, PublicOnlyRoute } from './components/RouteGuards';
+import BuilderPage from './pages/BuilderPage';
+import FavoritesPage from './pages/FavoritesPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -18,6 +20,9 @@ export default function App() {
         <Route element={<AppLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/wardrobe" element={<WardrobePage />} />
+          <Route path="/outfits/new" element={<BuilderPage />} />
+          <Route path="/outfits/:id" element={<BuilderPage />} />
+          <Route path="/favorites" element={<FavoritesPage />} />
         </Route>
       </Route>
 

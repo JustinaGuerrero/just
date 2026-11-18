@@ -43,13 +43,24 @@ export const COLORS = [
   { name: 'azul', hex: '#3B4F7A' },
 ] as const;
 
+export const OCCASIONS = [
+  { value: 'UNIVERSITY', label: 'Facultad' },
+  { value: 'WORK', label: 'Trabajo' },
+  { value: 'OUTING', label: 'Salidas' },
+  { value: 'EVENT', label: 'Eventos' },
+  { value: 'SPORT', label: 'Deporte' },
+  { value: 'OTHER', label: 'Otra' },
+] as const;
+
 export type Category = (typeof CATEGORIES)[number]['value'];
+export type Occasion = (typeof OCCASIONS)[number]['value'];
 export type Season = (typeof SEASONS)[number]['value'];
 export type Style = (typeof STYLES)[number]['value'];
 
 export const CATEGORY_LABEL = Object.fromEntries(CATEGORIES.map((c) => [c.value, c.label])) as Record<Category, string>;
 export const SEASON_LABEL = Object.fromEntries(SEASONS.map((s) => [s.value, s.label])) as Record<Season, string>;
 export const STYLE_LABEL = Object.fromEntries(STYLES.map((s) => [s.value, s.label])) as Record<Style, string>;
+export const OCCASION_LABEL = Object.fromEntries(OCCASIONS.map((o) => [o.value, o.label])) as Record<Occasion, string>;
 
 export function capitalize(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1);
