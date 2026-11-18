@@ -99,7 +99,7 @@ export function GarmentDialog({ garment, onClose }: GarmentDialogProps) {
 
     const values = { name, category, colors, styles, seasons, brand };
     if (garment) {
-      update.mutate({ id: garment.id, ...values }, { onSuccess: close });
+      update.mutate({ id: garment.id, ...values, image: file }, { onSuccess: close });
     } else if (file) {
       create.mutate({ ...values, image: file }, { onSuccess: close });
     }
@@ -138,24 +138,22 @@ export function GarmentDialog({ garment, onClose }: GarmentDialogProps) {
         <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-6" noValidate>
           <div className="flex flex-col gap-1.5">
             <span className="text-xs uppercase tracking-label text-ash">Foto</span>
-            <label className="relative flex h-56 cursor-pointer items-center justify-center overflow-hidden rounded-card border border-dashed border-sand bg-linen transition focus-within:ring-2 focus-within:ring-blush hover:border-ash">
+            <label className="relative flex h-72 cursor-pointer items-center justify-center overflow-hidden rounded-card border border-dashed border-sand bg-linen transition focus-within:ring-2 focus-within:ring-blush hover:border-ash">
               {imageSrc ? (
-                <img src={imageSrc} alt="Vista previa de la prenda" className="h-full w-full object-cover" />
+                <img src={imageSrc} alt="Vista previa de la prenda" className="h-full w-full object-contain" />
               ) : (
                 <span className="px-6 text-center text-sm text-ash">Tocá para elegir una foto (JPG, PNG o WebP, hasta 5 MB)</span>
               )}
-              {imageSrc && !isEdit && (
+              {imageSrc && (
                 <span className="absolute bottom-3 right-3 rounded-full bg-paper px-3 py-1 text-xs">Cambiar foto</span>
               )}
               <input
                 type="file"
                 accept="image/jpeg,image/png,image/webp"
                 onChange={handleFile}
-                disabled={isEdit}
                 className="sr-only"
               />
             </label>
-            {isEdit && <p className="text-xs text-ash">Para cambiar la foto, eliminá la prenda y subila de nuevo.</p>}
           </div>
 
           <TextField

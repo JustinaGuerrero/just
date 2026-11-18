@@ -146,9 +146,19 @@ garmentsRouter.post('/', upload.single('image'), async (req, res) => {
   }
 });
 
-// PATCH /api/garments/:id (JSON, solo los campos a cambiar)
-garmentsRouter.patch('/:id', async (req, res) => {
-  const parsed = updateSchema.safeParse(req.body);
+// PATCH /api/garments/:id
+// JSON con los campos a cambiar, o multipart/form-data si además se reemplaza la foto.
+garmentsRouter.patch('/:id', upload.single('image'), async (req, res) => {
+  const body = req.file
+    ? {
+        ...req.body,
+        colors: toList(req.body.colors),
+        styles: toList(req.body.styles),
+        seasons: toList(req.body.seasons),
+      }
+    : req.body;
+
+  const parsed = updateSchema.safeParse(body);
   if (!parsed.success) {
     return res.status(400).json({ error: parsed.error.issues[0].message });
   }
@@ -160,11 +170,26 @@ garmentsRouter.patch('/:id', async (req, res) => {
     return res.status(404).json({ error: 'No encontramos esa prenda' });
   }
 
-  const garment = await prisma.garment.update({
-    where: { id: existing.id },
-    data: parsed.data,
-  });
-  res.json({ garment });
+  const image = req.file ? await uploadImage(req.file.buffer, res.locals.userId) : null;
+
+  try {
+    const garment = await prisma.garment.update({
+      where: { id: existing.id },
+      data: image ? { ...parsed.data, imageUrl: image.url, imagePublicId: image.publicId } : parsed.data,
+    });
+
+    // La foto anterior ya no se usa: se borra de Cloudinary.
+    if (image && existing.imagePublicId) {
+      await deleteImage(existing.imagePublicId).catch((error) =>
+        console.error('No se pudo borrar la imagen anterior de Cloudinary:', error),
+      );
+    }
+    res.json({ garment });
+  } catch (error) {
+    // Si falla la base, no dejamos la imagen nueva huérfana.
+    if (image) await deleteImage(image.publicId).catch(() => undefined);
+    throw error;
+  }
 });
 
 // DELETE /api/garments/:id

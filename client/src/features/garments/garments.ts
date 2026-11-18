@@ -82,8 +82,21 @@ export function useCreateGarment() {
 export function useUpdateGarment() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, ...values }: GarmentValues & { id: string }) =>
-      api<{ garment: Garment }>(`/api/garments/${id}`, { method: 'PATCH', body: values }),
+    mutationFn: ({ id, image, ...values }: GarmentValues & { id: string; image?: File | null }) => {
+      // Con foto nueva se envía como formulario; si no, solo los datos en JSON.
+      if (image) {
+        const form = new FormData();
+        form.append('name', values.name);
+        form.append('category', values.category);
+        form.append('colors', values.colors.join(','));
+        form.append('styles', values.styles.join(','));
+        form.append('seasons', values.seasons.join(','));
+        form.append('brand', values.brand);
+        form.append('image', image);
+        return api<{ garment: Garment }>(`/api/garments/${id}`, { method: 'PATCH', body: form });
+      }
+      return api<{ garment: Garment }>(`/api/garments/${id}`, { method: 'PATCH', body: values });
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: GARMENTS_KEY }),
   });
 }

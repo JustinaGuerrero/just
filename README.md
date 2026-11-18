@@ -17,7 +17,7 @@ Es un proyecto personal que desarrollé de cero, de la base de datos a la interf
 ## Funcionalidades
 
 - **Cuenta propia:** registro, inicio y cierre de sesión con cookie `httpOnly` y JWT.
-- **Mi armario:** subida de fotos (JPG, PNG o WebP, hasta 5 MB), categoría, estilos y temporadas, y colores a elección: una paleta de 23 o cualquier color propio con su nombre. Búsqueda por nombre, marca o color, filtros, orden y edición o borrado de cada prenda.
+- **Mi armario:** subida de fotos (JPG, PNG o WebP, hasta 5 MB), categoría, estilos y temporadas, y colores a elección: una paleta de 23 o cualquier color propio con su nombre. Búsqueda por nombre, marca o color, filtros, orden y edición, cambio de foto y borrado de cada prenda.
 - **Creador de looks:** lienzo visual donde se mueven y escalan las prendas con el puntero, con ocasión y nombre para cada look.
 - **Favoritos:** marcá tus looks preferidos y filtralos por ocasión.
 - **Calendario:** planificá un look por día, con el pronóstico real de tu ciudad, un consejo de vestimenta y prendas sugeridas de tu armario según la temperatura.
@@ -122,7 +122,6 @@ Todas las rutas, salvo las de autenticación, requieren sesión.
 ## Próximos pasos
 
 - Más tests, en especial del backend y de los flujos completos.
-- Reemplazar la foto de una prenda ya guardada.
 
 ---
 
