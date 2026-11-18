@@ -1,4 +1,6 @@
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
+// En producción el frontend le habla a la API por la misma dirección (Vercel reenvía /api al backend),
+// así la cookie de sesión es de primera parte. En desarrollo va directo a localhost:3001.
+const API_URL = import.meta.env.VITE_API_URL ?? (import.meta.env.PROD ? '' : 'http://localhost:3001');
 
 export class ApiError extends Error {
   status: number;

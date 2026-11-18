@@ -8,7 +8,9 @@
     "db:migrate": "prisma migrate dev",
     "db:generate": "prisma generate",
     "db:studio": "prisma studio",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "start": "tsx src/index.ts",
+    "build": "prisma generate && prisma migrate deploy"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +28,8 @@
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.5.0",
     "pg": "^8.23.1",
+    "prisma": "^7.10.1",
+    "tsx": "^4.23.15",
     "zod": "^4.6.7"
   },
   "devDependencies": {
@@ -36,8 +40,6 @@
     "@types/multer": "^2.3.0",
     "@types/node": "^26.6.6",
     "@types/pg": "^8.23.1",
-    "prisma": "^7.10.1",
-    "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   }
 }
