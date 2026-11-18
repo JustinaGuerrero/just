@@ -41,6 +41,17 @@ export const COLORS = [
   { name: 'verde', hex: '#6B7F63' },
   { name: 'celeste', hex: '#AFC3D6' },
   { name: 'azul', hex: '#3B4F7A' },
+  { name: 'crema', hex: '#EFE6D2' },
+  { name: 'mostaza', hex: '#C79A2E' },
+  { name: 'naranja', hex: '#D2793F' },
+  { name: 'bordó', hex: '#6E2530' },
+  { name: 'fucsia', hex: '#C2457F' },
+  { name: 'lila', hex: '#B9A6CF' },
+  { name: 'violeta', hex: '#6B4C8A' },
+  { name: 'turquesa', hex: '#4FA3A5' },
+  { name: 'verde oliva', hex: '#6F6B3A' },
+  { name: 'dorado', hex: '#BFA054' },
+  { name: 'plateado', hex: '#C4C6C9' },
 ] as const;
 
 export const OCCASIONS = [
