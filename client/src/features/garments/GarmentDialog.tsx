@@ -50,13 +50,13 @@ export function GarmentDialog({ garment, onClose }: GarmentDialogProps) {
     if (dialog && !dialog.open) dialog.showModal();
   }, []);
 
-  // Vista previa de la foto elegida (se libera la memoria al cambiar o cerrar).
+  // Vista previa de la foto elegida: se libera la memoria al cambiarla y al cerrar el diálogo.
+  const previewUrl = useRef<string | null>(null);
   useEffect(() => {
-    if (!file) return;
-    const url = URL.createObjectURL(file);
-    setPreview(url);
-    return () => URL.revokeObjectURL(url);
-  }, [file]);
+    return () => {
+      if (previewUrl.current) URL.revokeObjectURL(previewUrl.current);
+    };
+  }, []);
 
   const close = () => dialogRef.current?.close();
 
@@ -68,6 +68,9 @@ export function GarmentDialog({ garment, onClose }: GarmentDialogProps) {
       return;
     }
     setFormError(null);
+    if (previewUrl.current) URL.revokeObjectURL(previewUrl.current);
+    previewUrl.current = URL.createObjectURL(selected);
+    setPreview(previewUrl.current);
     setFile(selected);
   }
 
